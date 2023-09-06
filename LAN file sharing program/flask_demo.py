@@ -14,7 +14,7 @@ def upload():
     if request.method == 'POST':
         file = request.files['file']
         filename = secure_filename(file.filename)
-        file.save(os.path.join('py\\data', filename))
+        file.save(os.path.join('data', filename))
         return '上传成功'
     return render_template('upload.html')
 
@@ -22,7 +22,7 @@ def upload():
 def download():
     url_str = ''
     for file in file_read():
-        url_str += '<h1>文件列表<h1><li><a href="' + file + '">' + file + '</a></li>\n'
+        url_str += '<h1>文件<h1><li><a href="' + file + '">' + file + '</a></li>\n'
         url_for('file_download', file_name = 'file')
     url_str += '<p><a href="remove">删除</a></p>'
     return url_str
@@ -37,16 +37,16 @@ def remove():
 
 @app.route('/download/remove/<file_name>')
 def file_remove(file_name):
-    shutil.move('py//data//' + file_name,'py//trash')
+    shutil.move('data/' + file_name,'trash')
     return '删除成功'
 
 @app.route('/download/<file_name>')
 def file_download(file_name):
-    return send_file('data\\'+file_name, as_attachment=True, attachment_filename=file_name)
+    return send_file('data/'+file_name, as_attachment=True, attachment_filename=file_name)
 
 def file_read():
     file_list = []
-    dir = 'py\\data'
+    dir = 'data'
     for root, dirs, files in os.walk(dir):
         for file in files:
             file_list.append(os.path.join(file))
@@ -54,5 +54,5 @@ def file_read():
     return file_list
 
 if __name__ == '__main__':
-    app.run(host='192.168.0.106', port=1234)
+    app.run(host='192.168.3.33', port=1234)
 
